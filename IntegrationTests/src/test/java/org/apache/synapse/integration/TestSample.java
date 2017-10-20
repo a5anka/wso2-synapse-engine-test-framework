@@ -1,12 +1,14 @@
 package org.apache.synapse.integration;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
+@Ignore("Unnecessary test")
 public class TestSample extends BaseTest {
 
-    String getSynapseConfig() {
+    protected String getSynapseConfig() {
         return "<definitions xmlns=\"http://ws.apache.org/ns/synapse\">\n"
                 + "\n"
                 + "    <sequence name=\"main\">\n"
