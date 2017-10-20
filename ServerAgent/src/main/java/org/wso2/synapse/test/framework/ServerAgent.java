@@ -53,37 +53,39 @@ public class ServerAgent {
 
     @GET
     @Path("/start")
-    public void startServer() {
+    public synchronized void  startServer() {
 
-        try {
-            String synapseHomeLocation = getSynapseHome();
+        if (process == null) {
+            try {
+                String synapseHomeLocation = getSynapseHome();
 
-            File synapseHome = Paths.get(synapseHomeLocation).toFile();
+                File synapseHome = Paths.get(synapseHomeLocation).toFile();
 
-            String[] cmdArray;
-            // For Windows
-            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                cmdArray = new String[]{ "cmd.exe", "/c", synapseHomeLocation + File.separator  + "bin" + File.separator +
-                        "synapse.bat", "-synapseConfig", synapseHomeLocation + File.separator + "repository"
-                        + File.separator + "conf" + File.separator + INTEGRATION_SYNAPSE_XML};
-            } else {
-                // For Unix
-                cmdArray = new String[]{ "sh", synapseHomeLocation + File.separator + "bin" + File.separator +
-                        "synapse.sh", "-synapseConfig", synapseHomeLocation + File.separator + "repository"
-                        + File.separator + "conf" + File.separator + INTEGRATION_SYNAPSE_XML};
+                String[] cmdArray;
+                // For Windows
+                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                    cmdArray = new String[]{ "cmd.exe", "/c", synapseHomeLocation + File.separator  + "bin" + File.separator +
+                            "synapse.bat", "-synapseConfig", synapseHomeLocation + File.separator + "repository"
+                            + File.separator + "conf" + File.separator + INTEGRATION_SYNAPSE_XML};
+                } else {
+                    // For Unix
+                    cmdArray = new String[]{ "sh", synapseHomeLocation + File.separator + "bin" + File.separator +
+                            "synapse.sh", "-synapseConfig", synapseHomeLocation + File.separator + "repository"
+                            + File.separator + "conf" + File.separator + INTEGRATION_SYNAPSE_XML};
+                }
+
+                process = Runtime.getRuntime().exec(cmdArray, null, synapseHome);
+
+                errorStreamHandler = new ServerLogReader("errorStream", process.getErrorStream());
+                inputStreamHandler = new ServerLogReader("inputStream", process.getInputStream());
+
+                // start the stream readers
+                inputStreamHandler.start();
+                errorStreamHandler.start();
+
+            } catch (Exception ex) {
+                log.error("Error while starting synapse server", ex);
             }
-
-            process = Runtime.getRuntime().exec(cmdArray, null, synapseHome);
-
-            errorStreamHandler = new ServerLogReader("errorStream", process.getErrorStream());
-            inputStreamHandler = new ServerLogReader("inputStream", process.getInputStream());
-
-            // start the stream readers
-            inputStreamHandler.start();
-            errorStreamHandler.start();
-
-        } catch (Exception ex) {
-            log.error("Error while starting synapse server", ex);
         }
 
     }
@@ -94,7 +96,7 @@ public class ServerAgent {
 
     @GET
     @Path("/stop")
-    public void stopServer() {
+    public synchronized void stopServer() {
         if (process != null) {
             try {
                 String synapseKillCommand = getSynapseHome() + File.separator + "bin" + File.separator + "synapse-stop.sh";
