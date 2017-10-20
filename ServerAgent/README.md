@@ -1,4 +1,4 @@
-# WSO2 Synapse Engine Test Framework - Synpase Server Agent
+# WSO2 Synapse Engine Test Framework - Synapse Server Agent
 
 Synapse server agent is responsible for running the synapse server with required configuration changes. Currently 
 following operations are supported through the agent.
