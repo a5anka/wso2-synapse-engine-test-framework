@@ -3,6 +3,7 @@ package org.apache.synapse.integration.utils;
 import org.junit.Assert;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -36,5 +37,26 @@ public class TestUtils {
         Assert.assertNotNull(resourceFileLocation, "framework.resource.location property should be set");
 
         return resourceFileLocation;
+    }
+
+    public static String getFileBody(File filePath) throws IOException {
+
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(filePath);
+            int c;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((c = fileInputStream.read()) != -1) {
+                stringBuilder.append(c);
+            }
+            String content = stringBuilder.toString();
+            content = content.replace("\n", "").replace("\r", "");
+
+            return content;
+        } finally {
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+        }
     }
 }

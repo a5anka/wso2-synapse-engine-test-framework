@@ -15,6 +15,8 @@ import static org.wso2.carbon.protocol.emulator.http.server.contexts.HttpServerR
 import static org.wso2.carbon.protocol.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
 
 public class BackEndServer {
+    
+    private static String hostIp = "10.100.8.3";
     public static void main(String[] args) throws IOException {
         startHttpEmulatorCopyHeaders();
         startHttpEmulatorMalformedPayload();
@@ -37,7 +39,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorLargePayload() throws IOException {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6066).context("/large").withEnableWireLog()
+                        configure().host(hostIp).port(6066).context("/large").withEnableWireLog()
                 )
 
                 .when(
@@ -53,7 +55,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorSlowResponse() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6065).context("/slow").withLogicDelay(3000)
+                        configure().host(hostIp).port(6065).context("/slow").withLogicDelay(3000)
                                 .withEnableWireLog()
                 )
 
@@ -70,7 +72,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorWithReadingDelay() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6067).context("/reading").withReadingDelay(3000)
+                        configure().host(hostIp).port(6067).context("/reading").withReadingDelay(3000)
                                 .withEnableWireLog()
                 )
 
@@ -87,7 +89,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorKeepAlive() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6068).context("/keep").withDisableKeepAlive()
+                        configure().host(hostIp).port(6068).context("/keep").withDisableKeepAlive()
                                 .withEnableWireLog()
                 )
 
@@ -104,7 +106,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorHttpVersion10() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6069).context("/version").withEnableWireLog()
+                        configure().host(hostIp).port(6069).context("/version").withEnableWireLog()
                                 .withHttpVersion(HttpVersion.HTTP_1_0)
                 )
 
@@ -121,7 +123,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorSlowWriter() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6070).context("/slow").withEnableWireLog()
+                        configure().host(hostIp).port(6070).context("/slow").withEnableWireLog()
                                 .withWritingDelay(3000)
                 )
 
@@ -138,7 +140,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorChunkingDisabled() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6071).context("/chunking").withEnableWireLog()
+                        configure().host(hostIp).port(6071).context("/chunking").withEnableWireLog()
                                 .withDisabledChunking()
                 )
 
@@ -155,7 +157,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorReadingConnectionDrop() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6072).context("/reading").withEnableWireLog()
+                        configure().host(hostIp).port(6072).context("/reading").withEnableWireLog()
                                 .withEnableReadingConnectionDrop()
                 )
 
@@ -172,7 +174,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorWritingConnectionDrop() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6073).context("/writing").withEnableWireLog()
+                        configure().host(hostIp).port(6073).context("/writing").withEnableWireLog()
                                 .withEnableWritingConnectionDrop()
                 )
 
@@ -189,7 +191,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorMalformedPayload() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6074).context("/malformed").withEnableWireLog()
+                        configure().host(hostIp).port(6074).context("/malformed").withEnableWireLog()
                 )
 
                 .when(
@@ -213,7 +215,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorCopyHeaders() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6075).context("/copy").withEnableWireLog()
+                        configure().host(hostIp).port(6075).context("/copy").withEnableWireLog()
                 )
 
                 .when(
@@ -236,7 +238,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorRandomDrop() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6076).context("/random").withEnableWireLog()
+                        configure().host(hostIp).port(6076).context("/random").withEnableWireLog()
                                 .randomConnectionClose(true).withDisableKeepAlive()
                 )
 
@@ -260,7 +262,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulator() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6077).context("/normal").withEnableWireLog()
+                        configure().host(hostIp).port(6077).context("/normal").withEnableWireLog()
                 )
 
                 .when(
@@ -283,7 +285,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorMissingHeader() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6078).context("/missing").withEnableWireLog()
+                        configure().host(hostIp).port(6078).context("/missing").withEnableWireLog()
                 )
 
                 .when(
@@ -306,7 +308,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpInvalidSpec() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6079).context("/invalid").withEnableWireLog()
+                        configure().host(hostIp).port(6079).context("/invalid").withEnableWireLog()
                 )
 
                 .when(
@@ -324,7 +326,7 @@ public class BackEndServer {
     private static HttpServerOperationBuilderContext startHttpEmulatorSlowWritingLargePayload() {
         return Emulator.getHttpEmulator().server()
                 .given(
-                        configure().host("10.100.8.3").port(6080).context("/slow").withEnableWireLog()
+                        configure().host(hostIp).port(6080).context("/slow").withEnableWireLog()
                                 .withWritingDelay(3000)
                 )
 
