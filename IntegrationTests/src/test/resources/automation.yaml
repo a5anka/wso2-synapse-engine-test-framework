@@ -1,0 +1,15 @@
+synapseAgent:
+  hostname: localhost
+  port: 9001
+
+synapseServer:
+  hostname: localhost
+  port: 8280
+
+backendServer:
+  hostname: localhost
+  port: 9000
+
+axis2ClientConfig:
+  clientRepo: target/test_repos/axis2Client
+  axis2Xml: src/test/resources/axis2Xml/axis2Client/axis2_def.xml
