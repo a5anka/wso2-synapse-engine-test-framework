@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class TestConnectionDroppingClient extends BaseTest {
+public class TestSample extends BaseTest {
 
     String getSynapseConfig() {
         return "<definitions xmlns=\"http://ws.apache.org/ns/synapse\">\n"
@@ -21,7 +21,7 @@ public class TestConnectionDroppingClient extends BaseTest {
     }
 
     @Test
-    public void testSmartClientMode() throws Exception {
+    public void testSampleMethod() throws Exception {
 
         // Test logic goes here
         TimeUnit.SECONDS.sleep(10);

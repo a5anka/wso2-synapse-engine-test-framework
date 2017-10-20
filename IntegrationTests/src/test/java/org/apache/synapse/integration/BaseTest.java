@@ -7,6 +7,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.synapse.integration.clients.StockQuoteSampleClient;
 import org.apache.synapse.integration.config.AutomationYamlFile;
+import org.apache.synapse.integration.utils.TestUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,10 +31,7 @@ public abstract class BaseTest {
 
     @BeforeClass
     public static void initParameters() {
-        String resourceFileLocation = System.getProperty("framework.resource.location");
-
-        //noinspection ObviousNullCheck System.getProperty can return null
-        Assert.assertNotNull(resourceFileLocation, "framework.resource.location property should be set");
+        String resourceFileLocation = TestUtils.getTestResourceLocation();
 
         FileInputStream yamlInput = null;
         try {
