@@ -67,7 +67,7 @@ public abstract class BaseTest {
     }
 
     @After
-    public void teardown() throws IOException {
+    public void teardown() throws Exception {
         stopRemoteSynapseServer();
     }
 
