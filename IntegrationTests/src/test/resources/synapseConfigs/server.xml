@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  ~  Licensed to the Apache Software Foundation (ASF) under one
+  ~  or more contributor license agreements.  See the NOTICE file
+  ~  distributed with this work for additional information
+  ~  regarding copyright ownership.  The ASF licenses this file
+  ~  to you under the Apache License, Version 2.0 (the
+  ~  "License"); you may not use this file except in compliance
+  ~  with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~   * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
+        
+<!-- An empty flat synapse configuration shipped with the Apache Synapse -->
+<definitions xmlns="http://ws.apache.org/ns/synapse">
+    <proxy name="large_payload">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6066/large/response" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="slow_response">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6065/slow/response" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="reading_delay">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6067/reading/delay" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="writing_delay">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6070/slow/writer" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="keep_alive">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6068/keep/alive" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="chunking_disabled">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6071/chunking/disabled" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="chunking_disabled_synapse">
+        <target>
+            <inSequence>
+                <property name="FORCE_HTTP_1.0" value="true" scope="axis2" />
+                <property name="DISABLE_CHUNKING" value="true" scope="axis2" />
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6071/chunking/disabled" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="support_http10">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6069/version/10" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="malformed_payload">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6074/malformed/payload" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <log level="full"/>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="normal_server">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6077/normal/server" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="random_drop">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6076/random/drop" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="missing_header">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6078/missing/header" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <log level="full"/>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+    <proxy name="reading_delay_server">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6072/reading/drop" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
+</definitions>
