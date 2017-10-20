@@ -80,7 +80,7 @@ public abstract class BaseTest {
 
         method.setRequestEntity(test_content);
 
-        int statusCode = client.executeMethod(method);
+        client.executeMethod(method);
     }
 
     public AutomationYamlFile getConfig() {
@@ -107,9 +107,7 @@ public abstract class BaseTest {
         HttpClient client = new HttpClient();
         GetMethod method = new GetMethod("http://" + getSynapseAgentAddress() + "/synapseAgent/start");
 
-        int statusCode = client.executeMethod(method);
-
-        System.out.println("Status : " + statusCode);
+        client.executeMethod(method);
 
         String synapseHostname = getConfig().getSynapseServer().getHostname();
         int synapsePort = Integer.parseInt(getConfig().getSynapseServer().getPort());
@@ -128,7 +126,6 @@ public abstract class BaseTest {
         try {
             // This will return when we can successfully connect to the port
             new Socket(synapseHostname, synapsePort).close();
-            System.out.println("Port available");
             return true;
         } catch (IOException e) {
             return false;
@@ -139,9 +136,7 @@ public abstract class BaseTest {
         HttpClient client = new HttpClient();
         GetMethod method = new GetMethod("http://" + getSynapseAgentAddress() + "/synapseAgent/stop");
 
-        int statusCode = client.executeMethod(method);
-
-        System.out.println("Status : " + statusCode);
+        client.executeMethod(method);
 
         String synapseHostname = getConfig().getSynapseServer().getHostname();
         int synapsePort = Integer.parseInt(getConfig().getSynapseServer().getPort());
