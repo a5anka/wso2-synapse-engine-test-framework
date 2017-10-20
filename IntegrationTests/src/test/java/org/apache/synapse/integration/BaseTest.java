@@ -135,12 +135,24 @@ public abstract class BaseTest {
         }
     }
 
-    private void stopRemoteSynapseServer() throws IOException {
+    private void stopRemoteSynapseServer() throws Exception {
         HttpClient client = new HttpClient();
         GetMethod method = new GetMethod("http://" + getSynapseAgentAddress() + "/synapseAgent/stop");
 
         int statusCode = client.executeMethod(method);
 
         System.out.println("Status : " + statusCode);
+
+        String synapseHostname = getConfig().getSynapseServer().getHostname();
+        int synapsePort = Integer.parseInt(getConfig().getSynapseServer().getPort());
+
+        boolean available = isPortAvailable(synapseHostname, synapsePort);
+        int tries = 1;
+
+        while (available && tries < 10) {
+            TimeUnit.SECONDS.sleep(1);
+            available = isPortAvailable(synapseHostname, synapsePort);
+            tries++;
+        }
     }
 }
