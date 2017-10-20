@@ -23,7 +23,8 @@ public class TestUtils {
     public static String getSynapseConfig(String relativePath) throws IOException {
         String resourceLocation = getTestResourceLocation();
 
-        byte[] encoded = Files.readAllBytes(Paths.get(resourceLocation + File.separator + relativePath));
+        byte[] encoded = Files.readAllBytes(
+                Paths.get(resourceLocation + File.separator + "synapseConfigs" + File.separator + relativePath));
 
         return new String(encoded, Charset.defaultCharset());
     }

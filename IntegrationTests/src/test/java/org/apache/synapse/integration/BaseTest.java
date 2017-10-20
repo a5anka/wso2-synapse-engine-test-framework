@@ -58,7 +58,7 @@ public abstract class BaseTest {
         strSubstitutor = new StrSubstitutor(valuesMap);
     }
 
-    abstract String getSynapseConfig();
+    protected abstract String getSynapseConfig() throws IOException;
 
     @Before
     public void setup() throws Exception {
