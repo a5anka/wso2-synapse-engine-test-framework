@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 public class ServerLogReader implements Runnable {
     private String streamType;
@@ -73,6 +74,8 @@ public class ServerLogReader implements Runnable {
                         stringBuilder.append(s).append("\n");
                         log.error(s);
                     }
+                } else {
+                    TimeUnit.MILLISECONDS.sleep(200);
                 }
             }
         } catch (Exception ex) {
