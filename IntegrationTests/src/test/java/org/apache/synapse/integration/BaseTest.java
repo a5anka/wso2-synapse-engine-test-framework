@@ -9,14 +9,12 @@ import org.apache.synapse.integration.clients.StockQuoteSampleClient;
 import org.apache.synapse.integration.config.AutomationYamlFile;
 import org.apache.synapse.integration.utils.TestUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -30,32 +28,29 @@ public abstract class BaseTest {
     private static StrSubstitutor strSubstitutor;
 
     @BeforeClass
-    public static void initParameters() {
+    public static void initParameters() throws Exception {
         String resourceFileLocation = TestUtils.getTestResourceLocation();
 
         FileInputStream yamlInput = null;
-        try {
-            yamlInput = new FileInputStream(new File(
-                    resourceFileLocation + File.separator + "automation.yaml"));
-        } catch (FileNotFoundException e) {
-            Assert.fail(e.getMessage());
-        }
+
+        yamlInput = new FileInputStream(new File(resourceFileLocation + File.separator + "automation.yaml"));
 
         Yaml yaml = new Yaml();
         configurations = yaml.loadAs(yamlInput, AutomationYamlFile.class);
 
         Properties endpointProperties = new Properties();
-        try {
-            endpointProperties.load(new FileInputStream(resourceFileLocation + File.separator + "endpoint.properties"));
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
+        FileInputStream propertiesInput = new FileInputStream(
+                resourceFileLocation + File.separator + "endpoint.properties");
+        endpointProperties.load(propertiesInput);
 
         HashMap<String, String> valuesMap = new HashMap<>();
         for (Map.Entry<Object, Object> objectObjectEntry : endpointProperties.entrySet()) {
             valuesMap.put((String) objectObjectEntry.getKey(), (String) objectObjectEntry.getValue());
         }
         strSubstitutor = new StrSubstitutor(valuesMap);
+
+        yamlInput.close();
+        propertiesInput.close();
     }
 
     protected abstract String getSynapseConfig() throws IOException;
