@@ -53,7 +53,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6067/slow/large" />
+                        <address uri="http://${backend.host}:6080/slow/large" />
                     </endpoint>
                 </send>
             </inSequence>
