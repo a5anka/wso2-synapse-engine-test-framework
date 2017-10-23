@@ -5,12 +5,18 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.text.StrSubstitutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.synapse.integration.clients.StockQuoteSampleClient;
 import org.apache.synapse.integration.config.AutomationYamlFile;
 import org.apache.synapse.integration.utils.TestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -24,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BaseTest {
 
+    private static final Log BASE_LOGGER = LogFactory.getLog(BaseTest.class);
     private static AutomationYamlFile configurations;
     private static StrSubstitutor strSubstitutor;
 
@@ -52,6 +59,21 @@ public abstract class BaseTest {
         yamlInput.close();
         propertiesInput.close();
     }
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            BASE_LOGGER.info("Starting test: " + description.getClassName() + "#" + description.getMethodName());
+        }
+
+        protected void succeeded(Description description) {
+            BASE_LOGGER.info("Test passed: " + description.getClassName() + "#" + description.getMethodName());
+        }
+
+        protected void failed(Throwable e, Description description) {
+            BASE_LOGGER.info("Test failed: " + description.getClassName() + "#" + description.getMethodName(), e);
+        }
+    };
 
     protected abstract String getSynapseConfig() throws IOException;
 
