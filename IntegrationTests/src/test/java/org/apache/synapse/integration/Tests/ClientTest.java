@@ -5,9 +5,8 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.synapse.integration.BaseTest;
 import org.apache.synapse.integration.utils.TestUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import org.wso2.carbon.protocol.emulator.dsl.Emulator;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientOperationBuilderContext;
@@ -290,8 +289,10 @@ public class ClientTest extends BaseTest {
         Assert.assertNull(response);
     }
 
-    @Test
-    @Ignore("Because the code is not written properly")
+    /**
+     * TODO: Fix the emulator client code to get this working
+     */
+    @Test(enabled = false)
     public void testConnectionDropWhileReading() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()

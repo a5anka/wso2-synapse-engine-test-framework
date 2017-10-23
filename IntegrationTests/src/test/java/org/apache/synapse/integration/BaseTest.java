@@ -10,18 +10,16 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.synapse.integration.clients.StockQuoteSampleClient;
 import org.apache.synapse.integration.config.AutomationYamlFile;
 import org.apache.synapse.integration.utils.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +33,10 @@ public abstract class BaseTest {
     private static StrSubstitutor strSubstitutor;
 
     @BeforeClass
-    public static void initParameters() throws Exception {
+    public void initParameters() throws Exception {
         String resourceFileLocation = TestUtils.getTestResourceLocation();
 
-        FileInputStream yamlInput = null;
+        FileInputStream yamlInput;
 
         yamlInput = new FileInputStream(new File(resourceFileLocation + File.separator + "automation.yaml"));
 
@@ -58,34 +56,27 @@ public abstract class BaseTest {
 
         yamlInput.close();
         propertiesInput.close();
+
+        uploadConfig();
     }
-
-    @Rule
-    public TestRule watcher = new TestWatcher() {
-        protected void starting(Description description) {
-            BASE_LOGGER.info("Starting test: " + description.getClassName() + "#" + description.getMethodName());
-        }
-
-        protected void succeeded(Description description) {
-            BASE_LOGGER.info("Test passed: " + description.getClassName() + "#" + description.getMethodName());
-        }
-
-        protected void failed(Throwable e, Description description) {
-            BASE_LOGGER.info("Test failed: " + description.getClassName() + "#" + description.getMethodName(), e);
-        }
-    };
 
     protected abstract String getSynapseConfig() throws IOException;
 
-    @Before
-    public void setup() throws Exception {
-        uploadConfig();
+    @BeforeMethod
+    public void setup(Method method) throws Exception {
+        BASE_LOGGER.info("Starting test: " + this.getClass().getName() + "#" + method.getName());
         startRemoteSynapseServer();
     }
 
-    @After
-    public void teardown() throws Exception {
+    @AfterMethod
+    public void teardown(Method method) throws Exception {
+        BASE_LOGGER.info("Test finished: " + this.getClass().getName() + "#" + method.getName());
         stopRemoteSynapseServer();
+    }
+
+    @AfterClass
+    public void teardownClass() throws Exception {
+        // Do nothing
     }
 
     public void uploadConfig() throws IOException {

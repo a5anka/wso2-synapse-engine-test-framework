@@ -1,6 +1,6 @@
 package org.apache.synapse.integration.utils;
 
-import org.junit.Assert;
+import org.testng.Assert;
 
 import java.io.File;
 import java.io.FileInputStream;
