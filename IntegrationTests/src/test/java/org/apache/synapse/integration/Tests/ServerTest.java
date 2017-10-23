@@ -17,7 +17,6 @@ import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientResponse
 import java.io.File;
 import java.io.IOException;
 
-@Ignore
 public class ServerTest extends BaseTest{
     private File plainFile = new File("100KB.txt");
     @Test

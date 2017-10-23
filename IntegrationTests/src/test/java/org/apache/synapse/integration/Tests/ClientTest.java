@@ -19,7 +19,7 @@ import org.wso2.carbon.protocol.emulator.http.client.contexts.RequestResponseCor
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-@Ignore
+
 public class ClientTest extends BaseTest {
     private String path = "/services/normal_server";
     private String responseBody = "{\"glossary\":{\"title" +

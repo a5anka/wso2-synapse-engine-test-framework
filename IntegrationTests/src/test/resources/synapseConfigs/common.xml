@@ -20,5 +20,18 @@
         
 <!-- An empty flat synapse configuration shipped with the Apache Synapse -->
 <definitions xmlns="http://ws.apache.org/ns/synapse">
-
+    <proxy name="large_payload">
+        <target>
+            <inSequence>
+                <send>
+                    <endpoint>
+                        <address uri="http://${backend.host}:6066/large/response" />
+                    </endpoint>
+                </send>
+            </inSequence>
+            <outSequence>
+                <send />
+            </outSequence>
+        </target>
+    </proxy>
 </definitions>
