@@ -22,12 +22,12 @@ import java.util.List;
 
 public class ClientTest extends BaseTest {
     private String path = "/services/normal_server";
-    private String responseBody = "{\"glossary\":{\"title" +
-            "\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\",\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\"," +
-            "\"SortAs\":\"SGML\",\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
+    private String responseBody ="{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
+            "\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\",\"SortAs\":\"SGML\"," +
+            "\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
             "\"Abbrev\":\"ISO8879:1986\",\"GlossDef\":{\"para\":\"Ameta-markuplanguage," +
-            "usedtocreatemarkuplanguagessuchasDocBook.\",\"GlossSeeAlso\":[\"GML\",\"XML\"]}," +
-            "\"GlossSee\":\"markup\"}}}}}";
+            "usedtocreatemarkuplanguagessuchasDocBook.\",\"GlossSeeAlso\":[\"GML\"," +
+            "\"XML\"]},\"GlossSee\":\"markup\"}}}}}";
     private File plainFile = new File("100KB.txt");
     private String processingPath = "/services/content_type";
     private String xmlBody = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -209,7 +209,8 @@ public class ClientTest extends BaseTest {
             Assert.assertEquals(responseBody, responseCorrelations.get(0).getReceivedResponse()
                     .getReceivedResponseContext()
                     .getResponseBody());
-            Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON, responseCorrelations.get(0).getReceivedResponse().getReceivedResponse()
+            Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON, responseCorrelations.get(0).getReceivedResponse()
+                    .getReceivedResponse()
                     .headers().get(HttpHeaders.Names.CONTENT_TYPE));
         }
     }
@@ -289,14 +290,16 @@ public class ClientTest extends BaseTest {
         Assert.assertNull(response);
     }
 
-    @Test @Ignore("Because the code is not written properly")
+    @Test
+    @Ignore("Because the code is not written properly")
     public void testConnectionDropWhileReading() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()
                 .given(
                         HttpClientConfigBuilderContext.configure()
                                 .host(getConfig().getSynapseServer().getHostname())
-                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort())).withEnableReadingConnectionDrop()
+                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort()))
+                                .withEnableReadingConnectionDrop()
                 )
                 .when(
                         HttpClientRequestBuilderContext.request().withPath(path)
