@@ -25,7 +25,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6066/large/response" />
+                        <address uri="http://${backend.host}:${large.response.server.port}/large/response" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -39,7 +39,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6067/reading/delay" />
+                        <address uri="http://${backend.host}:${reading.delay.server.port}/reading/delay" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -53,7 +53,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6080/slow/large" />
+                        <address uri="http://${backend.host}:${slow.large.server.port}/slow/large" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -67,7 +67,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6077/normal/server" />
+                        <address uri="http://${backend.host}:${good.server.port}/normal/server" />
                     </endpoint>
                 </send>
             </inSequence>

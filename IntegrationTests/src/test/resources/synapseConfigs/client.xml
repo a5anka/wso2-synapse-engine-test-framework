@@ -26,7 +26,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6077/normal/server" />
+                        <address uri="http://${backend.host}:${good.server.port}/normal/server" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -41,7 +41,7 @@
                 <log level="full" />
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6077/normal/server" />
+                        <address uri="http://${backend.host}:${good.server.port}/normal/server" />
                     </endpoint>
                 </send>
             </inSequence>

@@ -25,7 +25,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6077/normal/server" />
+                        <address uri="http://${backend.host}:${good.server.port}/normal/server" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -41,7 +41,7 @@
                 <property name="DISABLE_CHUNKING" value="true" scope="axis2" />
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6069/version/10" />
+                        <address uri="http://${backend.host}:${http10.server.port}/version/10" />
                     </endpoint>
                 </send>
             </inSequence>

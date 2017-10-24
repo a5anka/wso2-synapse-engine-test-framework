@@ -96,7 +96,6 @@ public class AutomationYamlFile {
 
         public void setClientRepo(String clientRepo) {
             this.clientRepo = TestUtils.getCurrentDir() + clientRepo;
-            System.out.println("Client repo " + this.clientRepo);
         }
 
         public String getAxis2Xml() {
@@ -105,7 +104,6 @@ public class AutomationYamlFile {
 
         public void setAxis2Xml(String axis2Xml) {
             this.axis2Xml = TestUtils.getCurrentDir() + axis2Xml;
-            System.out.println("Axis2 xml" + this.axis2Xml);
         }
     }
 }

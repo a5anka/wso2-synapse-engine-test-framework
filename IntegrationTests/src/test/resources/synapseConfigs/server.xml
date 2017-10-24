@@ -25,7 +25,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6066/large/response" />
+                        <address uri="http://${backend.host}:${large.response.server.port}/large/response" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -39,7 +39,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6065/slow/response" />
+                        <address uri="http://${backend.host}:${slow.response.server.port}/slow/response" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -53,7 +53,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6067/reading/delay" />
+                        <address uri="http://${backend.host}:${reading.delay.server.port}/reading/delay" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -67,7 +67,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6070/slow/writer" />
+                        <address uri="http://${backend.host}:${slow.writer.server.port}/slow/writer" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -81,7 +81,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6068/keep/alive" />
+                        <address uri="http://${backend.host}:${keep.alive.disabled.server.port}/keep/alive" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -95,7 +95,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6071/chunking/disabled" />
+                        <address uri="http://${backend.host}:${chunking.disabled.server.port}/chunking/disabled" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -111,7 +111,7 @@
                 <property name="DISABLE_CHUNKING" value="true" scope="axis2" />
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6071/chunking/disabled" />
+                        <address uri="http://${backend.host}:${chunking.disabled.server.port}/chunking/disabled" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -125,7 +125,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6069/version/10" />
+                        <address uri="http://${backend.host}:${http10.server.port}/version/10" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -139,7 +139,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6074/malformed/payload" />
+                        <address uri="http://${backend.host}:${malformed.payload.server.port}/malformed/payload" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -154,7 +154,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6077/normal/server" />
+                        <address uri="http://${backend.host}:${good.server.port}/normal/server" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -168,7 +168,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6076/random/drop" />
+                        <address uri="http://${backend.host}:${random.drop.server.port}/random/drop" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -182,7 +182,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6078/missing/header" />
+                        <address uri="http://${backend.host}:${missing.header.server.port}/missing/header" />
                     </endpoint>
                 </send>
             </inSequence>
@@ -197,7 +197,7 @@
             <inSequence>
                 <send>
                     <endpoint>
-                        <address uri="http://${backend.host}:6072/reading/drop" />
+                        <address uri="http://${backend.host}:${reading.drop.server.port}/reading/drop" />
                     </endpoint>
                 </send>
             </inSequence>

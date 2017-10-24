@@ -1,11 +1,9 @@
 package org.apache.synapse.integration;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-@Ignore("Unnecessary test")
 public class TestSample extends BaseTest {
 
     protected String getSynapseConfig() {
@@ -22,7 +20,12 @@ public class TestSample extends BaseTest {
                 + "</definitions>\n";
     }
 
-    @Test
+    /**
+     * Sample test case description
+     *
+     * @throws Exception due to error
+     */
+    @Test(enabled = false)
     public void testSampleMethod() throws Exception {
 
         // Test logic goes here
