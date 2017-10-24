@@ -159,4 +159,27 @@ public class CommonTest extends BaseTest {
                 .send();
         Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
     }
+
+    @Test
+    public void testClientSlowWritingBackendLargeResponseSlowWriting() throws IOException {
+        HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
+                .client()
+                .given(
+                        HttpClientConfigBuilderContext.configure()
+                                .host(getConfig().getSynapseServer().getHostname())
+                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort())).withWritingDelay(3000)
+                )
+                .when(
+                        HttpClientRequestBuilderContext.request().withPath("/services/slow_large")
+                                .withMethod(HttpMethod.POST).withBody(plainFile)
+                )
+                .then(
+                        HttpClientResponseBuilderContext.response().assertionIgnore()
+                )
+                .operation()
+                .send();
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
+                            TestUtils.getFileBody(largeFile));
+    }
+
 }
