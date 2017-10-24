@@ -1,5 +1,6 @@
 package org.apache.synapse.integration.Tests;
 
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import org.apache.synapse.integration.BaseTest;
 import org.apache.synapse.integration.utils.TestUtils;
@@ -107,6 +108,35 @@ public class CommonTest extends BaseTest {
                 .operation()
                 .send();
         Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
-                TestUtils.getFileBody(largeFile));
+                            TestUtils.getFileBody(largeFile));
+    }
+
+    @Test
+    public void testClientSlowWritingLargePayload() {
+        HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
+                .client()
+                .given(
+                        HttpClientConfigBuilderContext.configure()
+                                .host(getConfig().getSynapseServer().getHostname())
+                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort())).withWritingDelay(3000)
+                )
+                .when(
+                        HttpClientRequestBuilderContext.request().withPath("/services/normal_server")
+                                .withMethod(HttpMethod.POST).withBody(largeFile)
+                )
+                .then(
+                        HttpClientResponseBuilderContext.response().assertionIgnore()
+                )
+                .operation()
+                .send();
+        Assert.assertEquals("{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
+                                    "\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\",\"SortAs\":\"SGML\"," +
+                                    "\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
+                                    "\"Abbrev\":\"ISO8879:1986\",\"GlossDef\":{\"para\":\"Ameta-markuplanguage," +
+                                    "usedtocreatemarkuplanguagessuchasDocBook.\",\"GlossSeeAlso\":[\"GML\"," +
+                                    "\"XML\"]},\"GlossSee\":\"markup\"}}}}}",
+                            response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
+                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
     }
 }
