@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ClientTest extends BaseTest {
     private String path = "/services/normal_server";
-    private String responseBody ="{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
+    private String responseBody = "{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
             "\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\",\"SortAs\":\"SGML\"," +
             "\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
             "\"Abbrev\":\"ISO8879:1986\",\"GlossDef\":{\"para\":\"Ameta-markuplanguage," +
@@ -54,6 +54,30 @@ public class ClientTest extends BaseTest {
                 .when(
                         HttpClientRequestBuilderContext.request().withPath(path)
                                 .withMethod(HttpMethod.POST).withBody(new File("1MB.txt"))
+                )
+                .then(
+                        HttpClientResponseBuilderContext.response().assertionIgnore()
+                )
+                .operation()
+                .send();
+        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
+                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+    }
+
+    @org.testng.annotations.Test
+    public void testClientProcessingLargePayload() {
+        HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
+                .client()
+                .given(
+                        HttpClientConfigBuilderContext.configure()
+                                .host(getConfig().getSynapseServer().getHostname())
+                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort()))
+                )
+                .when(
+                        HttpClientRequestBuilderContext.request().withPath(processingPath)
+                                .withMethod(HttpMethod.POST).withBody(new File("1MB.txt"))
+                                .withHeader(HttpHeaders.Names.CONTENT_TYPE, "text/plain")
                 )
                 .then(
                         HttpClientResponseBuilderContext.response().assertionIgnore()

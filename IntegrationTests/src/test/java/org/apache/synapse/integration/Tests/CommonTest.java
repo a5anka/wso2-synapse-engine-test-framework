@@ -181,4 +181,24 @@ public class CommonTest extends BaseTest {
                             TestUtils.getFileBody(largeFile));
     }
 
+    @Test
+    public void testClientSlowReadingServerSlowReading() {
+        HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
+                .client()
+                .given(
+                        HttpClientConfigBuilderContext.configure()
+                                .host(getConfig().getSynapseServer().getHostname())
+                                .port(Integer.parseInt(getConfig().getSynapseServer().getPort())).withReadingDelay(3000)
+                )
+                .when(
+                        HttpClientRequestBuilderContext.request().withPath("/services/reading_delay")
+                                .withMethod(HttpMethod.POST).withBody(plainFile)
+                )
+                .then(
+                        HttpClientResponseBuilderContext.response().assertionIgnore()
+                )
+                .operation()
+                .send();
+        Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
+    }
 }
