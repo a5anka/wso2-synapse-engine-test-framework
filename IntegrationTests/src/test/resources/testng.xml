@@ -23,17 +23,17 @@
 
     <test name="synapse-integration-tests" parallel="false" verbose="2">
         <packages>
-            <package name="org.apache.synapse.integration.Tests"/>
+            <package name="org.apache.synapse.integration.tests"/>
         </packages>
     </test>
 
     <!--
     <test name="class-tests" verbose="2">
         <classes>
-            <class name="org.apache.synapse.integration.Tests.Http10ClientTest"/>
-            <class name="org.apache.synapse.integration.Tests.ClientTest"/>
-            <class name="org.apache.synapse.integration.Tests.ServerTest"/>
-            <class name="org.apache.synapse.integration.Tests.CommonTest"/>
+            <class name="org.apache.synapse.integration.tests.Http10ClientTest"/>
+            <class name="org.apache.synapse.integration.tests.ClientTest"/>
+            <class name="org.apache.synapse.integration.tests.ServerTest"/>
+            <class name="org.apache.synapse.integration.tests.CommonTest"/>
         </classes>
     </test>
     -->

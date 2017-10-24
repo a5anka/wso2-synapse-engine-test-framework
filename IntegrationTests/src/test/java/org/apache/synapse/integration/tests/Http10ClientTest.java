@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.apache.synapse.integration.Tests;
+package org.apache.synapse.integration.tests;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
