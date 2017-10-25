@@ -16,8 +16,11 @@ import static org.wso2.carbon.protocol.emulator.http.server.contexts.HttpServerR
 
 public class BackEndServer {
     
-    private static String hostIp = "10.100.8.3";
+    private static String hostIp = "127.0.0.1";
     public static void main(String[] args) throws IOException {
+        if (args.length > 0) {
+            hostIp = args[0];
+        }
         startHttpEmulatorCopyHeaders();
         startHttpEmulatorMalformedPayload();
         startHttpEmulatorWritingConnectionDrop();
