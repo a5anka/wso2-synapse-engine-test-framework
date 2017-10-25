@@ -84,7 +84,7 @@ public class ClientTest extends BaseTest {
                             response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
     }
 
-    @org.testng.annotations.Test
+    @Test
     public void testClientProcessingLargePayload() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()
@@ -268,7 +268,7 @@ public class ClientTest extends BaseTest {
                 )
                 .when(
                         HttpClientRequestBuilderContext.request().withPath(processingPath)
-                                .withMethod(HttpMethod.POST).withBody("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                                .withMethod(HttpMethod.POST).withXmlPayload("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                                                                               "<note>\n" +
                                                                               "  <to>Tove<to>\n" +
                                                                               "  <from>Jani</from>\n" +
@@ -276,17 +276,23 @@ public class ClientTest extends BaseTest {
                                                                               "  <body>Don't forget me this " +
                                                                               "weekend!</body>\n" +
                                                                               "</note>")
-                                .withHeader(HttpHeaders.Names.CONTENT_TYPE, "application/xml")
                 )
                 .then(
                         HttpClientResponseBuilderContext.response().assertionIgnore()
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpResponseStatus.ACCEPTED, response.getReceivedResponseContext().getResponseStatus());
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody().trim(),
+                            "<Exception>Error in proxy execution</Exception>",
+                            "Did not receive an error message when payload is malformed payload");
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
+                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            "Status code should be 500 for malformed payload");
     }
 
+    /**
+     * Client does not send the Content-Type header
+     */
     @Test
     public void testMissingHeaders() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
@@ -305,9 +311,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpResponseStatus.ACCEPTED, response.getReceivedResponseContext().getResponseStatus());
-
+        Assert.assertNull(response.getReceivedResponseContext().getResponseBody(),
+                            "Did not receive an error message when payload is malformed payload");
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
+                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            "Status code should be 500 for malformed payload");
     }
 
     @Test

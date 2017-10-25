@@ -21,7 +21,7 @@
 <suite name="SynapseIntegrationTestsuite">
     <!--<parameter name="useDefaultListeners" value="false"/>-->
 
-    <test name="synapse-integration-tests" parallel="false" verbose="2">
+    <test name="synapse-integration-tests" verbose="2">
         <packages>
             <package name="org.apache.synapse.integration.tests"/>
         </packages>

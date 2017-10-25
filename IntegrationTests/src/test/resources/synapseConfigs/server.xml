@@ -21,7 +21,7 @@
 <!-- An empty flat synapse configuration shipped with the Apache Synapse -->
 <definitions xmlns="http://ws.apache.org/ns/synapse">
     <proxy name="large_payload">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -35,7 +35,7 @@
         </target>
     </proxy>
     <proxy name="slow_response">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -49,7 +49,7 @@
         </target>
     </proxy>
     <proxy name="reading_delay">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -63,7 +63,7 @@
         </target>
     </proxy>
     <proxy name="writing_delay">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -77,7 +77,7 @@
         </target>
     </proxy>
     <proxy name="keep_alive">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -91,7 +91,7 @@
         </target>
     </proxy>
     <proxy name="chunking_disabled">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -105,7 +105,7 @@
         </target>
     </proxy>
     <proxy name="chunking_disabled_synapse">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <property name="FORCE_HTTP_1.0" value="true" scope="axis2" />
                 <property name="DISABLE_CHUNKING" value="true" scope="axis2" />
@@ -121,7 +121,7 @@
         </target>
     </proxy>
     <proxy name="support_http10">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -135,7 +135,7 @@
         </target>
     </proxy>
     <proxy name="malformed_payload">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -150,7 +150,7 @@
         </target>
     </proxy>
     <proxy name="normal_server">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -164,7 +164,7 @@
         </target>
     </proxy>
     <proxy name="random_drop">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -178,7 +178,7 @@
         </target>
     </proxy>
     <proxy name="missing_header">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -193,7 +193,7 @@
         </target>
     </proxy>
     <proxy name="reading_delay_server">
-        <target>
+        <target faultSequence="custom-error-handler">
             <inSequence>
                 <send>
                     <endpoint>
@@ -206,4 +206,16 @@
             </outSequence>
         </target>
     </proxy>
+    <sequence name="custom-error-handler">
+        <property name="customErrorDetail" value="Error in proxy execution" scope="default" type="STRING"/>
+        <log level="custom">
+            <property name="Detail" expression="get-property('customErrorDetail')"/>
+        </log>
+        <makefault version="soap11">
+            <code xmlns:tns="https://www.w3.org/2003/05/soap-envelope" value="tns:Receiver"/>
+            <reason expression="get-property('ERROR_MESSAGE')"/>
+            <detail expression="get-property('customErrorDetail')"/>
+        </makefault>
+        <send/>
+    </sequence>
 </definitions>
