@@ -24,9 +24,19 @@ public class TestUtils {
     public static String getSynapseConfig(String relativePath) throws IOException {
         String resourceLocation = getTestResourceLocation();
 
-        byte[] encoded = Files.readAllBytes(
-                Paths.get(resourceLocation + File.separator + "synapseConfigs" + File.separator + relativePath));
+        String absolutePath = resourceLocation + File.separator + "synapseConfigs" + File.separator + relativePath;
+        return getContentAsString(absolutePath);
+    }
 
+    /**
+     * Get file content as string
+     *
+     * @param filePath path to file
+     * @return string content
+     * @throws IOException if issue accessing the file
+     */
+    public static String getContentAsString(String filePath) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(filePath));
         return new String(encoded, Charset.defaultCharset());
     }
 

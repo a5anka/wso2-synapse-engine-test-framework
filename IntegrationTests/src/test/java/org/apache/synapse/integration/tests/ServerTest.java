@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ServerTest extends BaseTest{
+    private static final String XML_FILE_100KB = "src/test/resources/files/100KB.xml";
+
     private File plainFile = new File("src/test/resources/files/100KB.txt");
     @Test
     public void testLargePayload() throws IOException {
@@ -143,8 +145,14 @@ public class ServerTest extends BaseTest{
         Assert.assertEquals("Keep alive", response.getReceivedResponseContext().getResponseBody());
     }
 
-    @Test
-    public void testChunkingDisabled() {
+    /**
+     * Enable after fixing https://github.com/wso2/product-ei/issues/1211
+     * @throws Exception
+     */
+    @Test(enabled = false)
+    public void testChunkingDisabled() throws Exception {
+        String xmlData = TestUtils.getContentAsString(XML_FILE_100KB);
+
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()
                 .given(
@@ -154,15 +162,22 @@ public class ServerTest extends BaseTest{
                 )
                 .when(
                         HttpClientRequestBuilderContext.request().withPath("/services/chunking_disabled")
-                                .withMethod(HttpMethod.POST).withBody(plainFile)
+                                .withMethod(HttpMethod.POST)
+                                .withBody(xmlData)
+                                .withHeader(HttpHeaders.Names.CONTENT_TYPE, "application/xml")
                 )
                 .then(
                         HttpClientResponseBuilderContext.response().assertionIgnore()
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response);
-    }
+
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody().trim(),
+                            "<Exception>Error in proxy execution</Exception>",
+                            "Did not receive an error message due to chunking disabled backend error");
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
+                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            "Status code should be 500 for errors");    }
 
     @Test
     public void testChunkingDisabledSynapse() {
@@ -209,6 +224,9 @@ public class ServerTest extends BaseTest{
         Assert.assertEquals(response.getReceivedResponse().getStatus(), HttpResponseStatus.HTTP_VERSION_NOT_SUPPORTED);
     }
 
+    /**
+     * Enable after fixing https://github.com/wso2/product-ei/issues/1213
+     */
     @Test(enabled = false)
     public void testMalformedPayload() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
@@ -309,7 +327,11 @@ public class ServerTest extends BaseTest{
                             response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
     }
 
-    @Test
+    /**
+     * Enable after fixing https://github.com/wso2/product-ei/issues/1211
+     * @throws Exception
+     */
+    @Test(enabled = false)
     public void testReadingDrop() {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()
@@ -327,7 +349,12 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response);
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody().trim(),
+                            "<Exception>Error in proxy execution</Exception>",
+                            "Did not receive an error message when request reading is interrupted");
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
+                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            "Status code should be 500 for server error");
     }
 
     @Override
