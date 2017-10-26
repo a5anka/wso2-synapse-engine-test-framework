@@ -21,17 +21,23 @@ package org.apache.synapse.integration.tests;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import org.apache.synapse.integration.BaseTest;
+import org.apache.synapse.integration.utils.ServerConstants;
 import org.apache.synapse.integration.utils.TestUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.carbon.protocol.emulator.dsl.Emulator;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientConfigBuilderContext;
+import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientOperationBuilderContext;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientResponseProcessorContext;
+import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpResponseContext;
+import org.wso2.carbon.protocol.emulator.http.client.contexts.RequestResponseCorrelation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommonTest extends BaseTest {
     protected String getSynapseConfig() throws IOException {
@@ -221,5 +227,44 @@ public class CommonTest extends BaseTest {
                 .operation()
                 .send();
         Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
+    }
+
+    @Test
+    public void testBurstRequestsWithKeepAlive() throws Exception{
+        String payload = TestUtils.getContentAsString("src/test/resources/files/100KB.xml");
+        int numberOfRequests = 100;
+        List<HttpClientOperationBuilderContext> contextList = new ArrayList<>(numberOfRequests);
+
+        for (int i = 0; i < numberOfRequests; i++) {
+            HttpClientOperationBuilderContext httpClientOperationBuilderContext = Emulator
+                    .getHttpEmulator()
+                    .client()
+                    .given(HttpClientConfigBuilderContext
+                                   .configure()
+                                   .host(getConfig().getSynapseServer().getHostname())
+                                   .port(Integer.parseInt(getConfig().getSynapseServer().getPort()))
+                                   .withKeepAlive(true)
+                    )
+                    .when(HttpClientRequestBuilderContext
+                                  .request()
+                                  .withPath("/services/normal_server")
+                                  .withMethod(HttpMethod.POST)
+                                  .withBody(payload)
+                    )
+                    .then(HttpClientResponseBuilderContext.response().assertionIgnore())
+                    .operation()
+                    .sendAsync();
+            contextList.add(httpClientOperationBuilderContext);
+        }
+
+        for (int i = 0; i < numberOfRequests; i++) {
+            HttpClientOperationBuilderContext context = contextList.get(i);
+            List<RequestResponseCorrelation> responseCorrelations = context.shutdown();
+            HttpResponseContext responseContext = responseCorrelations.get(0).getReceivedResponse()
+                                                                              .getReceivedResponseContext();
+            Assert.assertEquals(responseContext.getResponseBody(), ServerConstants.GOOD_SERVER_JSON_RESPONS);
+            Assert.assertEquals(responseContext.getHeaderParameters().get(HttpHeaders.Names.CONTENT_TYPE).get(0),
+                                HttpHeaders.Values.APPLICATION_JSON);
+        }
     }
 }
