@@ -85,7 +85,8 @@ public class CommonTest extends BaseTest {
     }
 
     @Test
-    public void testLargeFileClientSlowReadingBackend() {
+    public void testLargeFileClientSlowReadingBackend() throws Exception {
+        String payload = TestUtils.getContentAsString("src/test/resources/files/1MB.txt");
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
                 .client()
                 .given(
@@ -95,14 +96,16 @@ public class CommonTest extends BaseTest {
                 )
                 .when(
                         HttpClientRequestBuilderContext.request().withPath("/services/reading_delay")
-                                .withMethod(HttpMethod.POST).withBody(largeFile)
+                                .withMethod(HttpMethod.POST).withBody(payload)
                 )
                 .then(
                         HttpClientResponseBuilderContext.response().assertionIgnore()
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response);
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
+                            "Slowly reading backend",
+                            "Slowly reading backend response did not receive correctly");
     }
 
     @Test
