@@ -19,6 +19,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="SynapseIntegrationTestsuite">
+    <listeners>
+        <listener class-name="org.apache.synapse.integration.framework.TestExecutionListener"/>
+    </listeners>
+
+
     <!--<parameter name="useDefaultListeners" value="false"/>-->
 
     <test name="synapse-integration-tests" verbose="2">

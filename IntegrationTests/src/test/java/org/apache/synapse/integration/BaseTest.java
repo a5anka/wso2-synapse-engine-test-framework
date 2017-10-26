@@ -64,13 +64,11 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void setup(Method method) throws Exception {
-        BASE_LOGGER.info("Starting test: " + this.getClass().getName() + "#" + method.getName());
         startRemoteSynapseServer();
     }
 
     @AfterMethod
     public void teardown(Method method) throws Exception {
-        BASE_LOGGER.info("Test finished: " + this.getClass().getName() + "#" + method.getName());
         stopRemoteSynapseServer();
     }
 
