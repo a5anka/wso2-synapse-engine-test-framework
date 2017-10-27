@@ -2,6 +2,10 @@ synapseAgent:
   hostname: localhost
   port: 9001
 
+synapsePrivate:
+  hostname: localhost
+  port: 8280
+
 synapseServer:
   hostname: localhost
   port: 8280

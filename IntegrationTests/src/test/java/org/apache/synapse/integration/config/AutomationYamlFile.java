@@ -6,6 +6,7 @@ public class AutomationYamlFile {
 
     private ServerDetails synapseAgent;
     private ServerDetails synapseServer;
+    private ServerDetails synapsePrivate;
     private ServerDetails backendServer;
     private Axis2ClientConfig axis2ClientConfig;
 
@@ -52,6 +53,17 @@ public class AutomationYamlFile {
 
     public void setSynapseAgent(ServerDetails synapseAgent) {
         this.synapseAgent = synapseAgent;
+    }
+
+    /**
+     * Getter for synapsePrivate
+     */
+    public ServerDetails getSynapsePrivate() {
+        return synapsePrivate;
+    }
+
+    public void setSynapsePrivate(ServerDetails synapsePrivate) {
+        this.synapsePrivate = synapsePrivate;
     }
 
     public static class ServerDetails {

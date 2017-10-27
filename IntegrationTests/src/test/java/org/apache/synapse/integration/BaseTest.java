@@ -115,8 +115,8 @@ public abstract class BaseTest {
 
         client.executeMethod(method);
 
-        String synapseHostname = getConfig().getSynapseServer().getHostname();
-        int synapsePort = Integer.parseInt(getConfig().getSynapseServer().getPort());
+        String synapseHostname = getConfig().getSynapsePrivate().getHostname();
+        int synapsePort = Integer.parseInt(getConfig().getSynapsePrivate().getPort());
 
         boolean available = isPortAvailable(synapseHostname, synapsePort);
         int tries = 1;
@@ -144,8 +144,8 @@ public abstract class BaseTest {
 
         client.executeMethod(method);
 
-        String synapseHostname = getConfig().getSynapseServer().getHostname();
-        int synapsePort = Integer.parseInt(getConfig().getSynapseServer().getPort());
+        String synapseHostname = getConfig().getSynapsePrivate().getHostname();
+        int synapsePort = Integer.parseInt(getConfig().getSynapsePrivate().getPort());
 
         boolean available = isPortAvailable(synapseHostname, synapsePort);
         int tries = 1;
