@@ -337,7 +337,9 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response);
+        Assert.assertNull(response,
+                          "The response " + response.getReceivedResponseContext().getResponseBody()
+                                  + " should not receive");
     }
 
     /**
