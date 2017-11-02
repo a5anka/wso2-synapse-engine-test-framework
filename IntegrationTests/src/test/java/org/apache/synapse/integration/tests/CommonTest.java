@@ -66,7 +66,8 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), TestUtils.getFileBody(largeFile));
+        Assert.assertEquals(TestUtils.getFileBody(largeFile), response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -87,7 +88,8 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), TestUtils.getFileBody(largeFile));
+        Assert.assertEquals(TestUtils.getFileBody(largeFile), response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -132,8 +134,8 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
-                            TestUtils.getFileBody(largeFile));
+        Assert.assertEquals(TestUtils.getFileBody(largeFile), response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -154,15 +156,17 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
+                            "{\"glossary\":{\"title\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\"," +
                                     "\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\",\"SortAs\":\"SGML\"," +
                                     "\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
                                     "\"Abbrev\":\"ISO8879:1986\",\"GlossDef\":{\"para\":\"Ameta-markuplanguage," +
                                     "usedtocreatemarkuplanguagessuchasDocBook.\",\"GlossSeeAlso\":[\"GML\"," +
                                     "\"XML\"]},\"GlossSee\":\"markup\"}}}}}",
-                            response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header is different from that expected");
     }
 
     @Test
@@ -183,7 +187,8 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), "Slowly reading backend",
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -204,8 +209,8 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
-                            TestUtils.getFileBody(largeFile));
+        Assert.assertEquals(TestUtils.getFileBody(largeFile), response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -226,11 +231,12 @@ public class CommonTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), "Slowly reading backend",
+                            "The received response body is not same as the expected");
     }
 
     @Test
-    public void testBurstRequestsWithKeepAlive() throws Exception{
+    public void testBurstRequestsWithKeepAlive() throws Exception {
         String payload = TestUtils.getContentAsString("src/test/resources/files/100KB.xml");
         int numberOfRequests = 100;
         List<HttpClientOperationBuilderContext> contextList = new ArrayList<>(numberOfRequests);
@@ -261,10 +267,12 @@ public class CommonTest extends BaseTest {
             HttpClientOperationBuilderContext context = contextList.get(i);
             List<RequestResponseCorrelation> responseCorrelations = context.shutdown();
             HttpResponseContext responseContext = responseCorrelations.get(0).getReceivedResponse()
-                                                                              .getReceivedResponseContext();
-            Assert.assertEquals(responseContext.getResponseBody(), ServerConstants.GOOD_SERVER_JSON_RESPONS);
-            Assert.assertEquals(responseContext.getHeaderParameters().get(HttpHeaders.Names.CONTENT_TYPE).get(0),
-                                HttpHeaders.Values.APPLICATION_JSON);
+                    .getReceivedResponseContext();
+            Assert.assertEquals(ServerConstants.GOOD_SERVER_JSON_RESPONS, responseContext.getResponseBody(),
+                                "The received response body is not same as the expected");
+            Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
+                                responseContext.getHeaderParameters().get(HttpHeaders.Names.CONTENT_TYPE).get(0),
+                                "The received ContentType header value is different from that expected");
         }
     }
 }

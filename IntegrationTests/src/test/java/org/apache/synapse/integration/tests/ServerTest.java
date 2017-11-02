@@ -22,6 +22,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.synapse.integration.BaseTest;
+import org.apache.synapse.integration.utils.ServerConstants;
 import org.apache.synapse.integration.utils.TestUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -34,10 +35,11 @@ import org.wso2.carbon.protocol.emulator.http.client.contexts.HttpClientResponse
 import java.io.File;
 import java.io.IOException;
 
-public class ServerTest extends BaseTest{
+public class ServerTest extends BaseTest {
     private static final String XML_FILE_100KB = "src/test/resources/files/100KB.xml";
 
     private File plainFile = new File("src/test/resources/files/100KB.txt");
+
     @Test
     public void testLargePayload() throws IOException {
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator()
@@ -56,8 +58,9 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(),
-                            TestUtils.getFileBody(new File("src/test/resources/files/1MB.txt")));
+        Assert.assertEquals(TestUtils.getFileBody(new File("src/test/resources/files/1MB.txt")),
+                            response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -78,7 +81,8 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Slowly responding backend", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals("Slowly responding backend", response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -100,7 +104,8 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals("Slowly reading backend", response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -121,7 +126,8 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Slowly writing backend", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals("Slowly writing backend", response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -142,11 +148,13 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Keep alive", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals("Keep alive", response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     /**
      * Enable after fixing https://github.com/wso2/product-ei/issues/1211
+     *
      * @throws Exception
      */
     @Test(enabled = false)
@@ -172,12 +180,13 @@ public class ServerTest extends BaseTest{
                 .operation()
                 .send();
 
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody().trim(),
-                            "<Exception>Error in proxy execution</Exception>",
+        Assert.assertEquals("<Exception>Error in proxy execution</Exception>",
+                            response.getReceivedResponseContext().getResponseBody().trim(),
                             "Did not receive an error message due to chunking disabled backend error");
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
-                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
-                            "Status code should be 500 for errors");    }
+        Assert.assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            response.getReceivedResponseContext().getResponseStatus(),
+                            "Status code should be 500 for errors");
+    }
 
     @Test
     public void testChunkingDisabledSynapse() {
@@ -198,7 +207,8 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals("Chunking disabled", response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals("Chunking disabled", response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
     @Test
@@ -220,8 +230,10 @@ public class ServerTest extends BaseTest{
                 .operation()
                 .send();
         Assert.assertEquals("The HTTP/1.1 is not supported because of the configurations\n",
-                            response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(response.getReceivedResponse().getStatus(), HttpResponseStatus.HTTP_VERSION_NOT_SUPPORTED);
+                            response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(HttpResponseStatus.HTTP_VERSION_NOT_SUPPORTED, response.getReceivedResponse().getStatus(),
+                            "The received response status is not same as the expected");
     }
 
     /**
@@ -245,11 +257,11 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody().trim(),
-                            "<Exception>Error in proxy execution</Exception>",
+        Assert.assertEquals("<Exception>Error in proxy execution</Exception>",
+                            response.getReceivedResponseContext().getResponseBody().trim(),
                             "Did not receive an error message when payload is malformed payload");
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
-                            HttpResponseStatus.INTERNAL_SERVER_ERROR,
+        Assert.assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                            response.getReceivedResponseContext().getResponseStatus(),
                             "Status code should be 500 for malformed payload");
     }
 
@@ -287,14 +299,12 @@ public class ServerTest extends BaseTest{
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), "{\"glossary\":{\"title" +
-                "\":\"exampleglossary\",\"GlossDiv\":{\"title\":\"S\",\"GlossList\":{\"GlossEntry\":{\"ID\":\"SGML\"," +
-                "\"SortAs\":\"SGML\",\"GlossTerm\":\"StandardGeneralizedMarkupLanguage\",\"Acronym\":\"SGML\"," +
-                "\"Abbrev\":\"ISO8879:1986\",\"GlossDef\":{\"para\":\"Ameta-markuplanguage," +
-                "usedtocreatemarkuplanguagessuchasDocBook.\",\"GlossSeeAlso\":[\"GML\",\"XML\"]}," +
-                "\"GlossSee\":\"markup\"}}}}}");
-        Assert.assertEquals("application/json",
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(ServerConstants.GOOD_SERVER_JSON_RESPONS,
+                            response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
     @Test
@@ -329,6 +339,7 @@ public class ServerTest extends BaseTest{
 
     /**
      * Enable after fixing https://github.com/wso2/product-ei/issues/1211
+     *
      * @throws Exception
      */
     @Test(enabled = false)
