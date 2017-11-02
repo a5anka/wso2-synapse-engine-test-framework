@@ -58,11 +58,12 @@ public class Http10ClientTest extends BaseTest {
                 .withXmlPayload(getXmlBody());
 
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator().client().given(clientConfig)
-                                                              .when(requestConfig)
-                                                              .then(HttpClientResponseBuilderContext.response().assertionIgnore())
-                                                              .operation().send();
+                .when(requestConfig)
+                .then(HttpClientResponseBuilderContext.response().assertionIgnore())
+                .operation().send();
 
-        Assert.assertEquals(getResponseBody(), response.getReceivedResponseContext().getResponseBody());
+        Assert.assertEquals(getResponseBody(), response.getReceivedResponseContext().getResponseBody(),
+                            "The received response body is not same as the expected");
     }
 
 
@@ -85,11 +86,12 @@ public class Http10ClientTest extends BaseTest {
                 .withXmlPayload(getXmlBody());
 
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator().client().given(clientConfig)
-                                                              .when(requestConfig)
-                                                              .then(HttpClientResponseBuilderContext.response().assertionIgnore())
-                                                              .operation().send();
+                .when(requestConfig)
+                .then(HttpClientResponseBuilderContext.response().assertionIgnore())
+                .operation().send();
 
-        Assert.assertEquals("HTTP version 1.0 only", response.getReceivedResponseContext().getResponseBody().trim());
+        Assert.assertEquals("HTTP version 1.0 only", response.getReceivedResponseContext().getResponseBody().trim(),
+                            "The received response body is not same as the expected");
     }
 
     /**
@@ -110,11 +112,12 @@ public class Http10ClientTest extends BaseTest {
                 .withXmlPayload(getXmlBody());
 
         HttpClientResponseProcessorContext response = Emulator.getHttpEmulator().client().given(clientConfig)
-                                                              .when(requestConfig)
-                                                              .then(HttpClientResponseBuilderContext.response().assertionIgnore())
-                                                              .operation().send();
+                .when(requestConfig)
+                .then(HttpClientResponseBuilderContext.response().assertionIgnore())
+                .operation().send();
 
-        Assert.assertEquals("HTTP version 1.0 only", response.getReceivedResponseContext().getResponseBody().trim());
+        Assert.assertEquals("HTTP version 1.0 only", response.getReceivedResponseContext().getResponseBody().trim(),
+                            "The received response body is not same as the expected");
     }
 
 

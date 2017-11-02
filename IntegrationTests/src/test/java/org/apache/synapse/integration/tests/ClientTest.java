@@ -79,9 +79,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
     @Test
@@ -103,9 +105,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
     @Test
@@ -126,9 +130,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
 
@@ -150,9 +156,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
     @Test
@@ -173,11 +181,14 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
         Assert.assertNotEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONNECTION),
-                               HttpHeaders.Values.KEEP_ALIVE);
+                               HttpHeaders.Values.KEEP_ALIVE,
+                               "The received Keep-alive header value is different from that expected");
         Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONNECTION),
                             HttpHeaders.Values.CLOSE);
     }
@@ -200,9 +211,11 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertEquals(responseBody, response.getReceivedResponseContext().getResponseBody());
-        Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON,
-                            response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE));
+        Assert.assertEquals(response.getReceivedResponseContext().getResponseBody(), responseBody,
+                            "The received response body is not same as the expected");
+        Assert.assertEquals(response.getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                            HttpHeaders.Values.APPLICATION_JSON,
+                            "The received ContentType header value is different from that expected");
     }
 
     @Test
@@ -225,7 +238,7 @@ public class ClientTest extends BaseTest {
                 .operation()
                 .send();
 
-        Assert.assertNull(response);
+        Assert.assertNull(response, "The response received is not null");
     }
 
     @Test
@@ -248,12 +261,13 @@ public class ClientTest extends BaseTest {
                     .operation()
                     .sendAsync();
             List<RequestResponseCorrelation> responseCorrelations = httpClientOperationBuilderContext.shutdown();
-            Assert.assertEquals(responseBody, responseCorrelations.get(0).getReceivedResponse()
-                    .getReceivedResponseContext()
-                    .getResponseBody());
-            Assert.assertEquals(HttpHeaders.Values.APPLICATION_JSON, responseCorrelations.get(0).getReceivedResponse()
-                    .getReceivedResponse()
-                    .headers().get(HttpHeaders.Names.CONTENT_TYPE));
+            Assert.assertEquals(responseCorrelations.get(0).getReceivedResponse().getReceivedResponseContext()
+                                        .getResponseBody(), responseBody,
+                                "The received response body is not same as the expected");
+            Assert.assertEquals(responseCorrelations.get(0).getReceivedResponse()
+                                        .getReceivedResponse().headers().get(HttpHeaders.Names.CONTENT_TYPE),
+                                HttpHeaders.Values.APPLICATION_JSON,
+                                "The received ContentType header value is different from that expected");
         }
     }
 
@@ -268,14 +282,15 @@ public class ClientTest extends BaseTest {
                 )
                 .when(
                         HttpClientRequestBuilderContext.request().withPath(processingPath)
-                                .withMethod(HttpMethod.POST).withXmlPayload("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                                                                              "<note>\n" +
-                                                                              "  <to>Tove<to>\n" +
-                                                                              "  <from>Jani</from>\n" +
-                                                                              "  <heading>Reminder</heading>\n" +
-                                                                              "  <body>Don't forget me this " +
-                                                                              "weekend!</body>\n" +
-                                                                              "</note>")
+                                .withMethod(HttpMethod.POST)
+                                .withXmlPayload("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                                                        "<note>\n" +
+                                                        "  <to>Tove<to>\n" +
+                                                        "  <from>Jani</from>\n" +
+                                                        "  <heading>Reminder</heading>\n" +
+                                                        "  <body>Don't forget me this " +
+                                                        "weekend!</body>\n" +
+                                                        "</note>")
                 )
                 .then(
                         HttpClientResponseBuilderContext.response().assertionIgnore()
@@ -312,7 +327,7 @@ public class ClientTest extends BaseTest {
                 .operation()
                 .send();
         Assert.assertNull(response.getReceivedResponseContext().getResponseBody(),
-                            "Did not receive an error message when payload is malformed payload");
+                          "Did not receive an error message when payload is malformed payload");
         Assert.assertEquals(response.getReceivedResponseContext().getResponseStatus(),
                             HttpResponseStatus.INTERNAL_SERVER_ERROR,
                             "Status code should be 500 for malformed payload");
@@ -339,7 +354,7 @@ public class ClientTest extends BaseTest {
                 .send();
         Assert.assertNull(response,
                           "The response " + response.getReceivedResponseContext().getResponseBody()
-                                  + " should not receive");
+                                  + " should not be receive");
     }
 
     /**
@@ -364,6 +379,6 @@ public class ClientTest extends BaseTest {
                 )
                 .operation()
                 .send();
-        Assert.assertNull(response);
+        Assert.assertNull(response, "The response received is not null");
     }
 }
